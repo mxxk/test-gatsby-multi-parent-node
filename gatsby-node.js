@@ -36,8 +36,8 @@ exports.onCreateNode = ({
   }
 }
 
-exports.sourceNodes = ({ actions }) => {
-  const { createTypes } = actions
+exports.sourceNodes = ({ actions, getNodesByType, createNodeId }) => {
+  const { createTypes, touchNode } = actions
 
   createTypes(`
     type PostTag implements Node {
@@ -45,6 +45,14 @@ exports.sourceNodes = ({ actions }) => {
       slug: String!
     }
   `)
+
+  getNodesByType(`MarkdownRemark`).forEach(node =>
+    node.frontmatter.tags.forEach(tag =>
+      touchNode({
+        nodeId: createNodeId(`PostTag-${tag}`)
+      })
+    )
+  )
 }
 
 exports.createPages = async ({ graphql, actions, createContentDigest, createNodeId, getNodesByType }) => {
