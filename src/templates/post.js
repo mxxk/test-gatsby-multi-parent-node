@@ -1,11 +1,13 @@
 import React from 'react'
 import { graphql, Link } from 'gatsby'
 
+import Layout from '../components/layout'
+
 export default ({ data }) => {
   const post = data.markdownRemark
 
   return (
-    <div>
+    <Layout>
       <h1>
         Post
       </h1>
@@ -19,7 +21,7 @@ export default ({ data }) => {
           </li>
         )}
       </ul>
-    </div>
+    </Layout>
   )
 }
 

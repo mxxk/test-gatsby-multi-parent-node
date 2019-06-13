@@ -5,11 +5,11 @@ import Layout from '../components/layout'
 
 export default ({ data }) => (
   <Layout>
-    <h1>All Posts</h1>
+    <h1>All Tags</h1>
     <ul>
-      {data.allMarkdownRemark.nodes.map(node =>
+      {data.allPostTag.nodes.map(node =>
         <li>
-          <Link to={node.fields.slug}>{node.excerpt}</Link>
+          <Link to={node.slug}>{node.tag}</Link>
         </li>
       )}
     </ul>
@@ -18,12 +18,10 @@ export default ({ data }) => (
 
 export const query = graphql`
   {
-    allMarkdownRemark {
+    allPostTag {
       nodes {
-        excerpt(pruneLength: 15)
-        fields {
-          slug
-        }
+        tag
+        slug
       }
     }
   }
