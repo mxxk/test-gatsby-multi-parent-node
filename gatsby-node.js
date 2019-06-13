@@ -55,8 +55,24 @@ exports.sourceNodes = ({ actions, getNodesByType, createNodeId }) => {
   )
 }
 
-exports.createPages = async ({ graphql, actions, createContentDigest, createNodeId, getNodesByType }) => {
-  const { createPage } = actions
+exports.createPages = async ({
+  graphql,
+  actions,
+  getNodesByType,
+  getNode,
+}) => {
+  const { createPage, deleteNode } = actions
+
+  // Remove old `PostTag` nodes.
+  const allTags = new Set(
+    getNodesByType(`MarkdownRemark`).flatMap(node => node.frontmatter.tags),
+  )
+  getNodesByType(`PostTag`).forEach(node => {
+    if (!allTags.has(node.tag)) {
+      deleteNode({ node })
+    }
+  })
+
   const { data } = await graphql(`
     {
       allMarkdownRemark {
